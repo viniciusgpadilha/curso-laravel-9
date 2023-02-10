@@ -8,16 +8,27 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index() 
+    protected $user;
+
+    public function __construct(User $user)
     {
-        $users = User::get();
+        $this->user = $user;
+    }
+
+    public function index(Request $request) 
+    {
+        $search = $request->search;
+        $users = $this->user->getUsers(
+            search: $request->get('search', '') ?? ''
+        );
+
         return view('users.index', compact('users'));
     }
 
     public function show($id) 
     {
         // $user = User::where('id', $id)->first();
-        if (!$user = User::find($id)) {
+        if (!$user = $this->user->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -47,7 +58,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        if(!$user = USer::find($id)) {
+        if(!$user = $this->user->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -56,7 +67,7 @@ class UserController extends Controller
 
     public function update(StoreUpdateUser $request, $id)
     {
-        if(!$user = USer::find($id)) {
+        if(!$user = $this->user->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -73,7 +84,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        if(!$user = USer::find($id)) {
+        if(!$user = $this->user->find($id)) {
             return redirect()->route('users.index');
         }
 
