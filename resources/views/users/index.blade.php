@@ -17,6 +17,7 @@
         <li>{{ $user->name }} - {{ $user->email }} 
             <a href="{{ route('users.show', ['id' => $user->id]) }}"> Detalhes |</a>
             <a href="{{ route('users.edit', ['id' => $user->id]) }}"> Editar |</a>
+            <a href="{{ route('comments.index', ['id' => $user->id]) }}"> Comentários (0) |</a>
             <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                 @method('DELETE')
                 @csrf
